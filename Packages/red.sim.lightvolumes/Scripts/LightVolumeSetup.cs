@@ -636,8 +636,9 @@ namespace VRCLightVolumes {
         }
 
         public void RegisterPostProcessorCRT(CustomRenderTexture crt) {
-            if (crt == null || Array.IndexOf(LightVolumeManager.AtlasPostProcessors, crt) != -1) return;
+            if (crt == null) return;
             LightVolumeManager.AtlasPostProcessors ??= new CustomRenderTexture[0];
+            if (Array.IndexOf(LightVolumeManager.AtlasPostProcessors, crt) != -1) return;
             Array.Resize(ref LightVolumeManager.AtlasPostProcessors, LightVolumeManager.AtlasPostProcessors.Length + 1);
             LightVolumeManager.AtlasPostProcessors[^1] = crt;
             Debug.Log($"[LightVolumeSetup] Registered post processor CRT: {crt.name}");
@@ -645,7 +646,7 @@ namespace VRCLightVolumes {
         }
 
         public void UnregisterPostProcessorCRT(CustomRenderTexture crt) {
-            if (crt == null) return;
+            if (crt == null || LightVolumeManager.AtlasPostProcessors == null) return;
             var index = Array.IndexOf(LightVolumeManager.AtlasPostProcessors, crt);
             if (index < 0) return;
             var newArray = new CustomRenderTexture[LightVolumeManager.AtlasPostProcessors.Length - 1];
